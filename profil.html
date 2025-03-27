@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - My Personal Website</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        /* Global Styles */
+        :root {
+            --primary: #6a0dad;
+            --primary-light: #9b59b6;
+            --secondary: #4b0082;
+            --success: #8a2be2;
+            --danger: #e6a8d7;
+            --warning: #da70d6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.7;
+            scroll-behavior: smooth;
+            padding-top: 70px; /* Added padding to prevent navbar overlap */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(15px) saturate(200%);
+            -webkit-backdrop-filter: blur(15px) saturate(200%);
+            padding: 0.8rem 1rem;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px; /* Fixed navbar height */
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.4s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::before {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            color: var(--secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+            background: none;
+            border: none;
+        }
+
+        .menu-toggle:hover {
+            color: var(--primary);
+        }
+
+        /* Section Header */
+        .section-header {
+            text-align: center;
+            padding: 3rem 1rem 2rem; /* Reduced padding */
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            font-size: 0.9rem;
+        }
+
+        /* Profile Container */
+        .profile-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem auto;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .profile-sidebar {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 1.5rem;
+            border-radius: 15px;
+            color: white;
+            align-self: start;
+            position: sticky;
+            top: 90px; /* Adjusted for fixed navbar */
+        }
+
+        .profile-image {
+            width: 100%;
+            max-width: 200px; /* Reduced max size */
+            border-radius: 15px;
+            margin: 0 auto 1.5rem;
+            display: block;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            height: auto;
+            aspect-ratio: 1/1; /* Make it square */
+            object-fit: cover;
+        }
+
+        .profile-info h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .profile-info h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: white;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        .info-item i {
+            margin-right: 0.5rem;
+            font-size: 1rem;
+            min-width: 16px;
+        }
+
+        .skill-item {
+            margin-bottom: 1rem;
+        }
+
+        .skill-item h4 {
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        .skill-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: white;
+            border-radius: 3px;
+        }
+
+        /* Profile Main */
+        .profile-main {
+            padding: 0.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .about-text p {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .education-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .education-item h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .education-item p {
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Table Styles */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 1rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.03);
+            font-size: 0.8rem;
+        }
+
+        th, td {
+            padding: 10px 8px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        tr:hover {
+            background: #f1f1f1;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .profile-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .profile-sidebar {
+                position: static;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .profile-info h2::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .info-item {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: rgba(106, 13, 173, 0.98);
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding: 2rem 0;
+                transition: all 0.4s ease;
+                backdrop-filter: blur(10px);
+                gap: 1.5rem;
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .nav-links a {
+                color: white;
+                font-size: 1.1rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .section-header {
+                padding: 2.5rem 1rem 1.5rem;
+            }
+
+            .section-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .profile-container {
+                padding: 1rem;
+                margin: 1rem auto;
+            }
+
+            .profile-sidebar {
+                padding: 1.5rem 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            body {
+                padding-top: 60px; /* Adjusted for smaller navbar */
+            }
+            
+            .navbar {
+                height: 60px;
+                padding: 0.5rem;
+            }
+            
+            .container {
+                padding: 0 0.5rem;
+            }
+            
+            .section-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .section-header p {
+                font-size: 0.8rem;
+            }
+
+            .profile-sidebar {
+                padding: 1rem 0.5rem;
+            }
+
+            .profile-image {
+                max-width: 150px; /* Smaller image on mobile */
+            }
+
+            .profile-info h2 {
+                font-size: 1.2rem;
+            }
+
+            .info-item {
+                font-size: 0.8rem;
+                margin-bottom: 0.6rem;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+            }
+
+            table {
+                font-size: 0.7rem;
+            }
+
+            th, td {
+                padding: 8px 6px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            table {
+                font-size: 0.65rem;
+            }
+
+            th, td {
+                padding: 6px 4px;
+            }
+
+            .profile-image {
+                max-width: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <button class="menu-toggle" onclick="toggleMenu()">&#9776;</button>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="profil.html">Profil</a></li>
+            <li><a href="galeri.html">Galeri</a></li>
+            <li><a href="formulir.html">Formulir</a></li>
+        </ul>
+    </nav>
+
+    <section class="section-header">
+        <h1 class="animate__animated animate__fadeInDown">Student Profile</h1>
+        <p class="animate__animated animate__fadeInUp">Pendidikan Informatika | Universitas Hamzanwadi</p>
+    </section>
+
+    <div class="container profile-container">
+        <aside class="profile-sidebar">
+            <img src="image/img.jpeg" alt="Profile Photo" class="profile-image">
+            <div class="profile-info">
+                <h2>Personal Information</h2>
+                <div class="info-item">
+                    <i class="fas fa-user"></i>
+                    <span>Nuriatul Masruro</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-id-card"></i>
+                    <span>NIM: 230305027</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Pendidikan Informatika</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-university"></i>
+                    <span>Universitas Hamzanwadi</span>
+                </div>
+        
+                <div class="info-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+62 87816715324</span>
+                </div>
+                
+                <h2>Skills</h2>
+                <div class="skill-item">
+                    <h4>Drawing</h4>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 85%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <h4>Dance</h4>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 75%"></div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="profile-main">
+            <section class="about-section">
+                <h2 class="section-title">About Me</h2>
+                <div class="about-text">
+                    <p>Hai! Nama saya Nuriatul Masruro saya dari desa tembeng putik, saya sekarang sedang berkuliah di universitas hamzanwadi, saya dari fakultas MIPA, prodi pendidikan informatika.</p>
+                </div>
+            </section>
+
+            <section class="education-section">
+                <h2 class="section-title">Education</h2>
+                <div class="education-item">
+                    <h3>Universitas Hamzanwadi</h3>
+                    <p><strong>Pendidikan Informatika</strong> | 2025 - Present</p>
+                    <p>Current GPA: 4.00/4.00</p>
+                    
+                </div>
+            </section>
+
+            <section class="schedule-section">
+                <h2 class="section-title">Class Schedule</h2>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>NO</th>
+                                <th>HARI</th>
+                                <th>WAKTU</th>
+                                <th>KODE</th>
+                                <th>MATAKULIAH</th>
+                                <th>RUANGAN</th>
+                                <th>KELAS</th>
+                                <th>DOSEN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Senin</td>
+                                <td>14:00 - 15:40</td>
+                                <td>PIN8423</td>
+                                <td>Jaringan Dasar</td>
+                                <td>Labkom 1</td>
+                                <td>4 A</td>
+                                <td>JAMALLUDDIN</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Selasa</td>
+                                <td>08:55 - 10:35</td>
+                                <td>PIN8422</td>
+                                <td>Pemrograman Web</td>
+                                <td>Labkom 1</td>
+                                <td>4 A</td>
+                                <td>HERI KUSWANTO</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Selasa</td>
+                                <td>10:35 - 12:35</td>
+                                <td>FMA6501</td>
+                                <td>Aplikasi Komputer</td>
+                                <td>Labkom 1</td>
+                                <td>4 A</td>
+                                <td>MUHAMMOD ZAMRONI USKA</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Rabu</td>
+                                <td>10:35 - 12:35</td>
+                                <td>PIN8424</td>
+                                <td>Sistem Informasi</td>
+                                <td>Labkom 1</td>
+                                <td>4 A</td>
+                                <td>BAIQ DESI DWI ARIANTI</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Rabu</td>
+                                <td>14:00 - 15:40</td>
+                                <td>PIN8425</td>
+                                <td>Pengembangan Aplikasi Mobile</td>
+                                <td>Labkom 1</td>
+                                <td>4 A</td>
+                                <td>JAMALLUDDIN</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>Jumat</td>
+                                <td>08:55 - 10:35</td>
+                                <td>PIN8426</td>
+                                <td>Multimedia Lanjut</td>
+                                <td>Labkom 1</td>
+                                <td>4 A</td>
+                                <td>YOSI NUR KHOLISHO</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>Jumat</td>
+                                <td>14:00 - 15:40</td>
+                                <td>PIN8427</td>
+                                <td>Analisis dan Perancangan Sistem</td>
+                                <td>Labkom 1</td>
+                                <td>4 A</td>
+                                <td>JAMALLUDDIN</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script>
+        function toggleMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                const navLinks = document.querySelector('.nav-links');
+                navLinks.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
